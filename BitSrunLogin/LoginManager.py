@@ -15,39 +15,39 @@ header={
 }
 
 class LoginManager:
-    def __init__(self,
-        url_login_page = "http://124.16.81.61/srun_portal_pc?ac_id=1&theme=pro",
-        url_get_challenge_api = "http://124.16.81.61/cgi-bin/get_challenge",
-        url_login_api = "http://124.16.81.61/cgi-bin/srun_portal",
-        n = "200",
-        vtype = "1",
-        acid = "1",
-        enc = "srun_bx1"
-    ):
-        # urls
-        self.url_login_page = url_login_page
-        self.url_get_challenge_api = url_get_challenge_api
-        self.url_login_api = url_login_api
-
-        # other static parameters
-        self.n = n
-        self.vtype = vtype
-        self.ac_id = acid
-        self.enc = enc
-    
-    def logout(self, ip=""):
-        if ip == "":
-            self.get_ip()
-        else:
-            self.ip = ip
-        logout_info_params = {
-            "callback": "jsonp1583251661367", # This value can be any string, but cannot be absent
-            "action": "logout",
-            "ip": self.ip
-        }
-
-        self._challenge_response = requests.get(self.url_login_api, params=logout_info_params, headers=header)
-        print(self._challenge_response.text)
+	def __init__(self,
+		url_login_page = "https://portal.ucas.ac.cn/srun_portal_pc?ac_id=1&theme=pro",
+		url_get_challenge_api = "https://portal.ucas.ac.cn/cgi-bin/get_challenge",
+		url_login_api = "https://portal.ucas.ac.cn/cgi-bin/srun_portal",
+		n = "200",
+		vtype = "1",
+		acid = "1",
+		enc = "srun_bx1"
+	):
+		# urls
+		self.url_login_page = url_login_page
+		self.url_get_challenge_api = url_get_challenge_api
+		self.url_login_api = url_login_api
+		
+		# other static parameters
+		self.n = n
+		self.vtype = vtype
+		self.ac_id = acid
+		self.enc = enc
+	
+	def logout(self, ip=""):
+		if ip == "":
+			self.get_ip()
+		else:
+			self.ip = ip
+		logout_info_params = {
+			"callback": "jsonp1583251661367", # This value can be any string, but cannot be absent
+			"action": "logout",
+			"ip": self.ip
+		}
+		
+		self._challenge_response = requests.get(self.url_login_api, params=logout_info_params, headers=header)
+		print(self._challenge_response.text)
 
 
     def login(self, username, password, ip=""):
