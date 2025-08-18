@@ -47,7 +47,7 @@ class LoginManager:
 			"ip": self.ip
 		}
 		
-		self._challenge_response = requests.get(self.url_login_api, params=logout_info_params, headers=header)
+		self._challenge_response = requests.get(self.url_login_api, params=logout_info_params, headers=header, timeout=2)
 		print(self._challenge_response.text)
 
 
@@ -67,12 +67,14 @@ class LoginManager:
 		self._get_login_page()
 		self._resolve_ip_from_login_page()
 		print("----------------")
+		time.sleep(2)
 
 	def get_token(self):
 		print("Step2: Get token by resolving challenge result.")
 		self._get_challenge()
 		self._resolve_token_from_challenge_response()
 		print("----------------")
+		time.sleep(2)
 
 	def get_login_responce(self):
 		print("Step3: Loggin and resolve response.")
@@ -81,6 +83,7 @@ class LoginManager:
 		self._resolve_login_responce()
 		print("The loggin result is: " + self._login_result)
 		print("----------------")
+		time.sleep(2)
 
 	def _is_defined(self, varname):
 		"""
@@ -127,7 +130,7 @@ class LoginManager:
 			"ip": self.ip
 		}
 
-		self._challenge_response = requests.get(self.url_get_challenge_api, params=params_get_challenge, headers=header)
+		self._challenge_response = requests.get(self.url_get_challenge_api, params=params_get_challenge, headers=header, timeout=2)
 
 	@checkvars(
 		varlist = "_challenge_response",
@@ -213,7 +216,7 @@ class LoginManager:
 			'n': self.n,
 			'type': self.vtype
 		}
-		self._login_responce = requests.get(self.url_login_api, params=login_info_params, headers=header)
+		self._login_responce = requests.get(self.url_login_api, params=login_info_params, headers=header, timeout=2)
 	
 	@checkvars(
 		varlist = "_login_responce",
