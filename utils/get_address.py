@@ -4,6 +4,13 @@ import logging
 from .get_os import get_os
 
 
+DEFAULT_UCAS_NETWORKS = (
+    "10.211.0.0/21",
+    "124.16.70.0/23",
+    "124.16.111.0/24",
+)
+
+
 def parse_windows_output(stdout, networks):
     interfaces = {}
     current_interface = None
@@ -35,7 +42,7 @@ def parse_linux_output(stdout, networks):
     return interfaces
 
 
-def find_interface_in_network(ucas_networks=["124.16.70.0/23", "124.16.111.0/24"]):
+def find_interface_in_network(ucas_networks=None):
     """
     LoginManager 的 always_online.py 默认使用 SRUN 界面的返回解析作为登录地址，
     这并不符合我们的要求，因为我们希望：
@@ -43,8 +50,11 @@ def find_interface_in_network(ucas_networks=["124.16.70.0/23", "124.16.111.0/24"
     * 每一台机器都可以通过校园网被外网访问，尽管这有些危险
     因此，需要通过本地查询获取接口 IP 地址。
 
-    :param network_address: 校园网的网段地址，国科大学园二的地址是 `124.16.70.0/23` 和 `124.16.111.0/24`.
+    :param ucas_networks: 校园网 IPv4 网段。默认包含当前私网地址段和旧公网地址段。
     """
+    if ucas_networks is None:
+        ucas_networks = DEFAULT_UCAS_NETWORKS
+
     networks = [ipaddress.ip_network(n) for n in ucas_networks]
     os_type = get_os()
 
@@ -59,7 +69,11 @@ def find_interface_in_network(ucas_networks=["124.16.70.0/23", "124.16.111.0/24"
         raise ValueError("Unsupported OS")
 
     result = subprocess.run(
-        cmd_map[os_type], stdout=subprocess.PIPE, text=True)
+        cmd_map[os_type],
+        stdout=subprocess.PIPE,
+        text=True,
+        check=True,
+    )
 
     if os_type == "windows":
         return parse_windows_output(result.stdout, networks)

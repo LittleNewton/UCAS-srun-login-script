@@ -29,3 +29,13 @@ always_online.py可采用`nohup`命令挂在后台：
 ``` bash
 nohup python always_online.py &
 ```
+
+## OpenWrt 定时登录配置
+
+`run.py` 从仓库根目录下的 `config/key` 读取校园网密码。该文件不会被 Git 跟踪，并且必须仅允许文件所有者读写：
+
+```bash
+mkdir -p config
+printf '%s\n' '校园网密码' > config/key
+chmod 600 config/key
+```
