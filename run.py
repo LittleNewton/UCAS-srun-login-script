@@ -1,7 +1,8 @@
-#!/home/newton/bin/miniconda3/bin/python
+#!/usr/bin/env python
 
 from utils.get_address import find_interface_in_network
 from BitSrunLogin.LoginManager import LoginManager
+import sys
 
 lm = LoginManager()
 ip_info = find_interface_in_network()
@@ -13,5 +14,8 @@ try:
             password = "7kiQf57bdVNVXN",
             ip = ip_address
         )
+        sys.exit(0)
 except Exception as e:
     print(f"Error dealing with IP-Interface group: {ip_info}, {e}")
+    sys.exit(1)
+
